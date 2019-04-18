@@ -1,0 +1,104 @@
+package river;
+
+import java.awt.Color;
+
+/**
+ * Write a one-sentence summary of your class here. Follow it with additional details about its
+ * purpose, what abstraction it represents, and how to use it.
+ * 
+ * @author sugie
+ * @version 30 Jan 2019
+ */
+public class GameObject
+{
+
+    /**
+     * 
+     */
+    private String   label;
+    /**
+     * 
+     */
+    private Location location;
+    /**
+     * 
+     */
+    private Color    color;
+    /**
+     * 
+     */
+    private String   sound;
+
+
+    /**
+     * Create a new GameObject object.
+     * 
+     * @param name
+     * @param location
+     * @param color
+     * @param sound
+     */
+    public GameObject(String name, Location location, Color color, String sound)
+    {
+        this.label = name;
+        this.location = location;
+        this.color = color;
+        this.sound = sound;
+    }
+
+
+    /**
+     * Place a description of your method here.
+     * 
+     * @return name
+     */
+    public String getLabel()
+    {
+        return label;
+    }
+
+
+    /**
+     * Place a description of your method here.
+     * 
+     * @return location
+     */
+    public Location getLocation()
+    {
+        return location;
+    }
+
+
+    /**
+     * Place a description of your method here.
+     * 
+     * @param loc
+     */
+    public void setLocation(Location loc)
+    {
+        this.location = loc;
+    }
+
+
+    /**
+     * Place a description of your method here.
+     * 
+     * @return color
+     */
+    public Color getColor()
+    {
+        return color;
+    }
+
+
+    /**
+     * Get the current value of sound.
+     * 
+     * @return The value of sound for this object.
+     */
+    public String getSound()
+    {
+        return sound;
+    }
+
+}
