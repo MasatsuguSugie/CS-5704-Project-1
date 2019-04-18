@@ -1,0 +1,231 @@
+package river;
+
+import java.awt.Color;
+import java.util.EnumMap;
+
+/**
+ * Write a one-sentence summary of your class here. Follow it with additional details about its
+ * purpose, what abstraction it represents, and how to use it.
+ * 
+ * @author sugie
+ * @version 30 Jan 2019
+ */
+public class FarmerGameEngine
+    implements GameEngine
+{
+
+    /**
+     * 
+     */
+    private static final Item         BEANS  = Item.ITEM_0;
+    /**
+     * 
+     */
+    private static final Item         GOOSE  = Item.ITEM_1;
+    /**
+     * 
+     */
+    private static final Item         WOLF   = Item.ITEM_2;
+    /**
+     * 
+     */
+    private static final Item         FARMER = Item.ITEM_3;
+    private Location                  boatLocation;
+    private EnumMap<Item, GameObject> itemMap;
+
+
+    /**
+     * Create a new GameEngine object.
+     */
+    public FarmerGameEngine()
+    {
+        GameObject wolf = new GameObject("W", Location.START, Color.CYAN, "Howl");
+        GameObject goose = new GameObject("G", Location.START, Color.CYAN, "Honk");
+        GameObject beans = new GameObject("B", Location.START, Color.CYAN, "");
+        GameObject farmer = new GameObject("", Location.START, Color.MAGENTA, "");
+        boatLocation = Location.START;
+        itemMap = new EnumMap<Item, GameObject>(Item.class);
+        itemMap.put(BEANS, beans);
+        itemMap.put(GOOSE, goose);
+        itemMap.put(WOLF, wolf);
+        itemMap.put(FARMER, farmer);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getItemLabel(Item item)
+    {
+        return itemMap.get(item).getLabel();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Location getItemLocation(Item item)
+    {
+        return itemMap.get(item).getLocation();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Color getItemColor(Item item)
+    {
+        return itemMap.get(item).getColor();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Location getBoatLocation()
+    {
+        return boatLocation;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object getSound(Item item)
+    {
+        return itemMap.get(item).getSound();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void loadBoat(Item item)
+    {
+        if (numberOfPassengersInBoat() < 0)
+        {
+            if (itemMap.get(item).getLocation() == boatLocation)
+            {
+                itemMap.get(item).setLocation(Location.BOAT);
+            }
+        }
+    }
+
+
+    /**
+     * Place a description of your method here.
+     * 
+     * @param item
+     */
+    public void unloadBoat(Item item)
+    {
+        if (itemMap.get(item).getLocation() == Location.BOAT)
+        {
+            itemMap.get(item).setLocation(boatLocation);
+        }
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void rowBoat()
+    {
+        if (getItemLocation(FARMER) == Location.BOAT)
+        {
+            if (boatLocation == Location.START)
+            {
+                boatLocation = Location.FINISH;
+            }
+            else
+            {
+                boatLocation = Location.START;
+            }
+        }
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean gameIsWon()
+    {
+        return getItemLocation(WOLF) == Location.FINISH && getItemLocation(GOOSE) == Location.FINISH
+            && getItemLocation(BEANS) == Location.FINISH
+            && getItemLocation(FARMER) == Location.FINISH;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean gameIsLost()
+    {
+        return wolfEatsGoose() || gooseEatsBeans();
+
+    }
+
+
+    private boolean wolfEatsGoose()
+    {
+        if (getItemLocation(GOOSE) == Location.START && boatLocation == Location.FINISH)
+        {
+            if (getItemLocation(GOOSE) == getItemLocation(WOLF))
+            {
+                return true;
+            }
+        }
+        else if (getItemLocation(GOOSE) == Location.FINISH && boatLocation == Location.START)
+        {
+            if (getItemLocation(GOOSE) == getItemLocation(WOLF))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private boolean gooseEatsBeans()
+    {
+        if (getItemLocation(GOOSE) == getItemLocation(BEANS))
+        {
+            if (getItemLocation(BEANS) == Location.START && boatLocation == Location.FINISH)
+            {
+                return true;
+            }
+            else if (getItemLocation(BEANS) == Location.FINISH && boatLocation == Location.START)
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+
+    private int numberOfPassengersInBoat()
+    {
+        int i = 0;
+        for (Item item : Item.values())
+        {
+            if (itemMap.get(item).getLocation() == Location.BOAT)
+            {
+                i++;
+            }
+            else
+                i--;
+        }
+        return i;
+    }
+
+}
